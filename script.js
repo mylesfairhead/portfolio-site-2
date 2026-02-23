@@ -1,17 +1,19 @@
 document.addEventListener("DOMContentLoaded", () => {
   const modal = document.getElementById("modal");
-  if (!modal) return;
-
-  const frame = modal.querySelector(".frame");
+  const frame = modal ? modal.querySelector(".frame") : null;
 
   function closeVideo() {
     if (frame) frame.innerHTML = "";
-    modal.hidden = true;
-    modal.setAttribute("aria-hidden", "true");
+    if (modal) {
+      modal.hidden = true;
+      modal.setAttribute("aria-hidden", "true");
+    }
     document.body.style.overflow = "";
   }
 
   function openVideo(embedUrl) {
+    if (!modal) return;
+
     modal.hidden = false;
     modal.setAttribute("aria-hidden", "false");
 
@@ -30,26 +32,26 @@ document.addEventListener("DOMContentLoaded", () => {
     document.body.style.overflow = "hidden";
   }
 
-  // Force it closed on load (fixes “modal stuck open”)
+  // Always start closed (prevents “stuck open”)
   closeVideo();
 
-  // Click handling (works even if you renamed the close button)
+  // One click handler for everything (very hard to break)
   document.addEventListener("click", (e) => {
-    // Close button (either id="close" OR class="modal-close")
+    // Close via X
     if (e.target && (e.target.id === "close" || e.target.classList.contains("modal-close"))) {
       e.preventDefault();
       closeVideo();
       return;
     }
 
-    // Clicking backdrop closes (clicking inside the frame does not)
-    if (e.target === modal) {
+    // Close by clicking backdrop
+    if (modal && e.target === modal) {
       closeVideo();
       return;
     }
 
-    // Work buttons open
-    const btn = e.target.closest && e.target.closest(".work-btn[data-embed]");
+    // Open via clicking a work
+    const btn = e.target.closest?.(".work-btn[data-embed]");
     if (btn) {
       openVideo(btn.dataset.embed);
     }
@@ -57,6 +59,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ESC closes
   window.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && !modal.hidden) closeVideo();
+    if (e.key === "Escape" && modal && !modal.hidden) closeVideo();
   });
 });
