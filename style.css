@@ -188,7 +188,7 @@ a:hover{ color:var(--fg); }
   display:grid;
   place-items:center;
   padding:40px;
-  z-index:50;
+  z-index:9999;
 }
 
 .modal-frame{
@@ -215,6 +215,7 @@ a:hover{ color:var(--fg); }
   font-size:26px;
   cursor:pointer;
   line-height:40px;
+  z-index: 10000;
 }
 
 /* RESPONSIVE */

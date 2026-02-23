@@ -1,43 +1,62 @@
-const modal = document.getElementById("modal");
-const frame = modal.querySelector(".frame");
-const closeBtn = document.getElementById("close");
+document.addEventListener("DOMContentLoaded", () => {
+  const modal = document.getElementById("modal");
+  if (!modal) return;
 
-function openVideo(embedUrl){
-  modal.hidden = false;
-  modal.setAttribute("aria-hidden", "false");
+  const frame = modal.querySelector(".frame");
 
-  frame.innerHTML = `
-    <iframe
-      src="${embedUrl}"
-      width="100%" height="100%"
-      frameborder="0"
-      allow="autoplay; fullscreen; picture-in-picture"
-      allowfullscreen
-    ></iframe>
-  `;
+  function closeVideo() {
+    if (frame) frame.innerHTML = "";
+    modal.hidden = true;
+    modal.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+  }
 
-  // prevent background scroll
-  document.body.style.overflow = "hidden";
-}
+  function openVideo(embedUrl) {
+    modal.hidden = false;
+    modal.setAttribute("aria-hidden", "false");
 
-function closeVideo(){
-  frame.innerHTML = "";
-  modal.hidden = true;
-  modal.setAttribute("aria-hidden", "true");
-  document.body.style.overflow = "";
-}
+    if (frame) {
+      frame.innerHTML = `
+        <iframe
+          src="${embedUrl}"
+          width="100%" height="100%"
+          frameborder="0"
+          allow="autoplay; fullscreen; picture-in-picture"
+          allowfullscreen
+        ></iframe>
+      `;
+    }
 
-closeBtn.addEventListener("click", closeVideo);
+    document.body.style.overflow = "hidden";
+  }
 
-modal.addEventListener("click", (e) => {
-  // clicking the dark backdrop closes; clicking the frame doesn’t
-  if (e.target === modal) closeVideo();
-});
+  // Force it closed on load (fixes “modal stuck open”)
+  closeVideo();
 
-window.addEventListener("keydown", (e) => {
-  if (e.key === "Escape" && !modal.hidden) closeVideo();
-});
+  // Click handling (works even if you renamed the close button)
+  document.addEventListener("click", (e) => {
+    // Close button (either id="close" OR class="modal-close")
+    if (e.target && (e.target.id === "close" || e.target.classList.contains("modal-close"))) {
+      e.preventDefault();
+      closeVideo();
+      return;
+    }
 
-document.querySelectorAll(".work-btn[data-embed]").forEach(btn => {
-  btn.addEventListener("click", () => openVideo(btn.dataset.embed));
+    // Clicking backdrop closes (clicking inside the frame does not)
+    if (e.target === modal) {
+      closeVideo();
+      return;
+    }
+
+    // Work buttons open
+    const btn = e.target.closest && e.target.closest(".work-btn[data-embed]");
+    if (btn) {
+      openVideo(btn.dataset.embed);
+    }
+  });
+
+  // ESC closes
+  window.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && !modal.hidden) closeVideo();
+  });
 });
