@@ -173,3 +173,26 @@ document.addEventListener("DOMContentLoaded", () => {
     item.addEventListener("toggle", updateYearPosition);
   });
 });
+
+3) Add JS (in script.js)
+// Fullscreen button for modal
+document.addEventListener("DOMContentLoaded", () => {
+  const modal = document.getElementById("modal");
+  const fsBtn = document.getElementById("fs");
+  const frameWrap = modal?.querySelector(".modal-frame");
+
+  if (!modal || !fsBtn || !frameWrap) return;
+
+  fsBtn.addEventListener("click", async () => {
+    try{
+      if (document.fullscreenElement) {
+        await document.exitFullscreen();
+      } else {
+        await frameWrap.requestFullscreen();
+      }
+    } catch (e) {
+      // Some browsers block fullscreen on iframes; fallback is just rely on Vimeo control
+      console.warn("Fullscreen failed:", e);
+    }
+  });
+});
