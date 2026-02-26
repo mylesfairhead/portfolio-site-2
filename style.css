@@ -379,7 +379,7 @@ a:hover{ color:var(--fg); }
   img.work-still{
     height: 22vw !important;
     min-height: 120px !important;
-    max-height: 120px !important;
+    max-height: 180px !important;
     object-fit: cover !important;
     object-position: 50% 45% !important;
     display:block !important;
