@@ -135,8 +135,11 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-// Move year from summary row into expanded row when open (no duplicates)
+// Move year from summary row into expanded row when open (desktop only)
 document.addEventListener("DOMContentLoaded", () => {
+  // Don't run on mobile / narrow screens
+  if (window.matchMedia("(max-width: 820px)").matches) return;
+
   const collab = document.getElementById("collaborations");
   if (!collab) return;
 
@@ -156,22 +159,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const year = summary.querySelector(".year");
     if (!year) return;
 
-    // Create anchor so we always restore correctly
+    // Anchor for returning year to exact original spot
     const anchor = document.createComment("year-anchor");
     year.parentNode.insertBefore(anchor, year);
 
     function updateYearPosition() {
-      if (item.open) {
-        slot.appendChild(year);
-      } else {
-        anchor.parentNode.insertBefore(year, anchor.nextSibling);
-      }
+      if (item.open) slot.appendChild(year);
+      else anchor.parentNode.insertBefore(year, anchor.nextSibling);
     }
 
-    // Run once on load
+    // Run once on load + on toggle
     updateYearPosition();
-
-    // Run on toggle
     item.addEventListener("toggle", updateYearPosition);
   });
 });
