@@ -446,6 +446,28 @@ a:hover{ color:var(--fg); }
     max-width: 320px;
     height: auto;         
   }
+
+  /* MOBILE: modal video should be centered and not cropped */
+#modal.modal{
+  padding: 16px !important;
+}
+
+#modal .modal-frame{
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto !important;
+  aspect-ratio: 16 / 9 !important;
+}
+
+#modal iframe{
+  width: 100% !important;
+  height: 100% !important;
+}
+
+#modal.modal{
+  padding-top: calc(16px + env(safe-area-inset-top)) !important;
+  padding-bottom: calc(16px + env(safe-area-inset-bottom)) !important;
+}
 }
 
 /* --- HARD OVERRIDE: MODAL MUST COVER SCREEN --- */
