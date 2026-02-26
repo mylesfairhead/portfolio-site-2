@@ -117,16 +117,16 @@ a:hover{ color:var(--fg); }
 .page{
   max-width:1200px;
   margin:0 auto;
-  padding: 120px 56px 120px 56px;
+  padding: 130px 56px 100px 56px;
 }
 
 .section{
-  padding:60px 0 50px 0;
+  padding:28px;
   border-top:none;
 }
 
 .section h2{
-  margin:0 0 22px 0;
+  margin:0 0 18px 0;
   font-size:12px;
   letter-spacing:.22em;
   text-transform:uppercase;
@@ -134,7 +134,7 @@ a:hover{ color:var(--fg); }
 }
 
 .work{
-  margin:0 0 56px 0;
+  margin:0 0 20px 0;
 }
 
 .work-btn{
@@ -343,7 +343,7 @@ a:hover{ color:var(--fg); }
   max-width: 1200px;
   margin: 0 auto;
   padding: 40px 56px;
-
+  position: relative;
   display:flex;
   justify-content: space-between;
   align-items: flex-end;
@@ -580,3 +580,57 @@ a:hover{ color:var(--fg); }
   color: var(--muted);
 }
 
+/* Desktop only: nest content under section headings */
+@media (min-width: 821px){
+
+  .section h2{
+    margin-left: -13px;   /* pull heading slightly left */
+  }
+
+  .section > *:not(h2){
+    padding-left: 13px;   /* indent all section content */
+  }
+
+  .section .hint{
+    padding-left: 1px;   /* match your indent */
+  }
+
+}
+
+/* --- Cutout / carved logo --- */
+.logo{
+  position: relative;
+  margin: 0;
+  font-weight: 800;
+  letter-spacing: .04em;
+  line-height: 1;
+  color: transparent;              /* the base text is a hole */
+  -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 1px rgba(159,191,74,.18); /* faint edge */
+}
+
+/* This layer "fills" the hole with the background behind it */
+.logo::before{
+  content: attr(aria-label);
+  position: absolute;
+  inset: 0;
+
+  /* show what's behind the header through the letters */
+  color: rgba(255,255,255,.02);    /* almost transparent, just to render glyphs */
+  -webkit-text-fill-color: transparent;
+
+  /* the magic: backdrop only inside the text */
+  background: rgba(159,191,74,.9);
+  -webkit-background-clip: text;
+  background-clip: text;
+
+  /* make it feel like light bleeding through */
+  filter: blur(.55px) contrast(1.35) saturate(1.2);
+  mix-blend-mode: screen;
+
+  text-shadow:
+    0 0 10px rgba(159,191,74,.22),
+    0 0 24px rgba(159,191,74,.12);
+
+  pointer-events: none;
+}
